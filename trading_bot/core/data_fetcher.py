@@ -12,3 +12,18 @@ def get_crypto_price(coin_id, currency='usd'):
     except Exception as e:
         print(f"Veri çekme hatası: {e}")
         return None
+
+def get_historical_data(coin_id, currency='usd', days=7):
+    """
+    Belirtilen kripto paranın geçmiş fiyat verilerini çeker.
+    """
+    try:
+        cg = CoinGeckoAPI()
+        historical_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency=currency, days=days)
+        # API'den gelen veri [(timestamp, price), ...] formatındadır.
+        # Sadece fiyatları [price1, price2, ...] listesi olarak ayıklayalım.
+        prices = [item[1] for item in historical_data['prices']]
+        return prices
+    except Exception as e:
+        print(f"Tarihsel veri çekme hatası: {e}")
+        return None
